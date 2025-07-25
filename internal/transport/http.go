@@ -3,6 +3,7 @@ package transport
 import (
 	"context"
 	"fmt"
+	"github.com/SavinDevelop/techcrm-go/internal/handler/user"
 	"github.com/SavinDevelop/techcrm-go/pkg/db"
 	"net/http"
 	"time"
@@ -16,6 +17,7 @@ type HTTPServer struct {
 
 func NewHTTPServer(db *db.Postgres) *HTTPServer {
 	mux := http.NewServeMux()
+	userHand := user.NewHandler(db)
 
 	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
@@ -24,6 +26,7 @@ func NewHTTPServer(db *db.Postgres) *HTTPServer {
 			return
 		}
 	})
+	mux.HandleFunc("POST /api/v1/user", userHand.Create)
 
 	return &HTTPServer{
 		db:  db,

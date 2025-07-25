@@ -16,8 +16,8 @@ func NewService(repo *user.Repository) *Service {
 	return &Service{repo: repo}
 }
 
-func (s *Service) Create(ctx context.Context, user *model.User) error {
-	user.ID = uuid.New()
+func (s *Service) Create(ctx context.Context, user model.User) error {
+	user.ID = uuid.New().String()
 	user.CreatedAt = time.Now().Format(time.RFC3339)
 	user.UpdateAt = user.CreatedAt
 	return s.repo.Create(ctx, user)
