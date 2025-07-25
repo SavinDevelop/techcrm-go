@@ -1,6 +1,7 @@
 package db
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
@@ -23,6 +24,10 @@ func NewPostgres() (*Postgres, error) {
 	fmt.Println("Connected to PostgreSQL")
 
 	return &Postgres{db: db}, nil
+}
+
+func (p *Postgres) Exec(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
+	return p.db.ExecContext(ctx, query, args...)
 }
 
 func (p *Postgres) Close() error {
